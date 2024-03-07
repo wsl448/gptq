@@ -18,6 +18,7 @@ class Quantizer(nn.Module):
         self.register_buffer('maxq', torch.tensor(0))
         self.register_buffer('scale', torch.zeros(shape))
         self.register_buffer('zero', torch.zeros(shape))
+        # tensor를 모델과 함께 사용할 때 register_buffer 사용됨
 
     def configure(
         self,
