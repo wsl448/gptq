@@ -31,6 +31,7 @@ def opt_sequential(model, dataloader, dev):
     model.model.decoder.embed_tokens = model.model.decoder.embed_tokens.to(dev) 
     model.model.decoder.embed_positions = model.model.decoder.embed_positions.to(dev)
     if hasattr(model.model.decoder, 'project_out') and model.model.decoder.project_out:
+        #project_out 속성이 None 또는 False 값으로 설정되어 있지 않고 제대로 존재할때만 device로 보냄
         model.model.decoder.project_out = model.model.decoder.project_out.to(dev) 
     if hasattr(model.model.decoder, 'project_in') and model.model.decoder.project_in:
         model.model.decoder.project_in = model.model.decoder.project_in.to(dev) 
