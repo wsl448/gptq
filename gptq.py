@@ -76,6 +76,7 @@ class GPTQ:
         del self.H
         dead = torch.diag(H) == 0
         H[dead, dead] = 1
+        #행렬의 대각요소만 1로 만듬
         W[:, dead] = 0
 
         if static_groups:
