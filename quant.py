@@ -5,7 +5,9 @@ import torch.nn as nn
 
 def quantize(x, scale, zero, maxq):
     if maxq < 0:
-        return (x > scale / 2).float() * scale + (x < zero / 2).float() * zero
+        return (x > scale / 2).float() * scale + (x < zero / 2).float() * zero 
+        # maxq가 음수이면 scale과 zero 중 적절한 값을 return한다.
+        # (x > scale / 2) -> True 또는 False 값을 return하고, .float()을 거쳐 1.0 또는 0.0으로 변환된다.
     q = torch.clamp(torch.round(x / scale) + zero, 0, maxq)
     return scale * (q - zero)
 
