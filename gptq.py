@@ -26,6 +26,7 @@ class GPTQ:
             W = W.t()
         self.rows = W.shape[0]
         self.columns = W.shape[1]
+        # weight의 column과 H의 row와 column을 매치시킴
         self.H = torch.zeros((self.columns, self.columns), device=self.dev)
         self.nsamples = 0
 
