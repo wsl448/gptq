@@ -44,6 +44,9 @@ def opt_sequential(model, dataloader, dev):
     cache = {'i': 0, 'attention_mask': None}
 
     class Catcher(nn.Module):
+        # OWQ의 목표는 layer의 weights만 quantize하는 것
+        # 따라서 layer에 맨 처음 들어오는 input의 경우 cache에 저장해놨다가 reuse하는 것이 합리적이다.
+        # 맨 처음 layer를 Catcher로 바꿔줌으로써 맨 처음 들어오는 input을 cache에 저장
         def __init__(self, module):
             super().__init__()
             self.module = module
@@ -116,6 +119,7 @@ def opt_sequential(model, dataloader, dev):
         torch.cuda.empty_cache()
 
         inps, outs = outs, inps
+        # 위에서 처럼 
 
     model.config.use_cache = use_cache
     
@@ -199,7 +203,7 @@ def opt_eval(model, testenc, dev):
         del layer
         torch.cuda.empty_cache()
         inps, outs = outs, inps
-
+        # layer마다 나오는 output과 input을 서로 바꿔치기함으로써 다음 layer의 inps로 이전 layer의 outs가 사용될 수 있게 한다.
     if model.model.decoder.final_layer_norm is not None:
         model.model.decoder.final_layer_norm = model.model.decoder.final_layer_norm.to(dev)
     if model.model.decoder.project_out is not None:
